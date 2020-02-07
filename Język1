@@ -1,0 +1,99 @@
+package język;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
+
+import static java.lang.System.exit;
+import static java.lang.System.setOut;
+
+public class Język_1 implements Język{
+    private HashMap<Character, ArrayList<HashMap<Character, Integer>>> ileRazy;
+
+    public Język_1(){
+        ileRazy = new HashMap<>();
+    }
+
+    public HashMap<Character, ArrayList<HashMap<Character, Integer>>> getIleRazy() {
+        return ileRazy;
+    }
+
+    @Override
+    public Map<Character, Integer> częstości(String prefiks) {
+        return null;
+    }
+
+    @Override
+    public void uczSię(String słowo) {
+
+    }
+
+    @Override
+    public void uczSięZPliku(String nazwa) {
+        Collection<String> txt = new ArrayList<>();
+        Scanner sk = null;
+        try {
+            sk = new Scanner(new File(nazwa)).useDelimiter("[^" + literyAlfabetu() + literyAlfabetu().toUpperCase() + "]+");
+        } catch (FileNotFoundException e) {
+            System.out.println("Plik nie istnieje");
+            exit(-1);
+        }
+
+        while (sk.hasNext())
+            txt.add(sk.next());
+        ArrayList<HashMap<Character, Integer>> nowa = new ArrayList<HashMap<Character, Integer>>();
+        HashMap<Character, Integer> słw = new HashMap<>();
+        for (String słowo: txt) {
+            if (słowo != null)
+                for (int i = 0; i < słowo.length(); i++) {
+                    try {
+                        if (ileRazy.isEmpty()) {
+                            słw.put(słowo.charAt(i+1),1);
+                            nowa.add(słw);
+                            ileRazy.put(słowo.charAt(i), nowa);
+                        } else {
+                            int j = i + 1;
+                            if (ileRazy.containsKey(słowo.charAt(i))) {
+                                for (HashMap<Character, Integer> mapa: nowa) {
+                                    if (mapa.containsKey(słowo.charAt(j))) {
+                                        Collection<Integer> z = mapa.values();
+                                        for (Integer a : z) {
+                                            a++;
+                                            mapa.put(słowo.charAt(j), a);
+                                            break;
+                                        }
+                                    }else{
+                                        //nowa = new ArrayList<HashMap<Character, Integer>>();
+                                        //słw = new HashMap<>();
+                                        Integer z = 1;
+                                        mapa.put(słowo.charAt(j),z);
+                                        break;
+                                    }
+                                }
+                                ileRazy.put(słowo.charAt(i), nowa);
+                            } else {
+                                słw = new HashMap<>();
+                                słw.put(słowo.charAt(i+1),1);
+                                nowa = new ArrayList<HashMap<Character, Integer>>();
+                                nowa.add(słw);
+                                ileRazy.put(słowo.charAt(i), nowa);
+                            }
+                        }
+                        }catch(StringIndexOutOfBoundsException w){
+                            w.printStackTrace();
+                        }
+                    }
+            }
+        }
+
+    @Override
+    public String literyAlfabetu() {
+        String wyn = "";
+        for (ArrayList<HashMap<Character, Integer>> i: ileRazy.
+        }
+    }
+
+    @Override
+    public String nazwa() {
+        return null;
+    }
+}
